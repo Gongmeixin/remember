@@ -1,9 +1,16 @@
 <template>
-	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
+	<view>
+		<!-- 自定义导航栏 -->
+		<view class="navBarBox">
+			<!-- 状态栏占位 -->
+			<view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }"></view>
+			<!-- 真正的导航栏内容 -->
+			<view class="navBar">
+				<view class="navTitle">记吧单词</view>
+			</view>
 		</view>
+		<!-- 页面内容 -->
+		<view>我是页面内容</view>
 	</view>
 </template>
 
@@ -11,7 +18,10 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello'
+				// 状态栏高度
+				statusBarHeight: 0,
+				// 导航栏高度
+				navBarHeight: 82 + 11,
 			}
 		},
 		onLoad() {
@@ -19,34 +29,33 @@
 		},
 		methods: {
 
-		}
+		},
+		//第一次加载时调用
+		created() {
+			//获取手机状态栏高度
+			this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight'];
+		},
 	}
 </script>
 
 <style>
-	.content {
+	.statusBar,.navBar{
+		background-color: #2979ff;
+	}
+	
+	.navBar{
+		height: 44px;
+	}
+	.navBarBox .navBar {
+		padding: 3rpx 45rpx;
+		padding-bottom: 8rpx;
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		align-items: center;
-		justify-content: center;
 	}
 
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+	.navTitle{
+		font-size: 16px;
+		font-weight: 700;
 	}
 </style>

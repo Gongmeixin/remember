@@ -1,23 +1,18 @@
 
-.content {
+.statusBar,.navBar{
+		background-color: #2979ff;
+}
+.navBar{
+		height: 44px;
+}
+.navBarBox .navBar {
+		padding: 3rpx 45rpx;
+		padding-bottom: 8rpx;
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		align-items: center;
-		justify-content: center;
 }
-.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-}
-.text-area {
-		display: flex;
-		justify-content: center;
-}
-.title {
-		font-size: 36rpx;
-		color: #8f8f94;
+.navBarBox .navBar view{
+		font-size: 16px;
+		font-weight: 700;
 }

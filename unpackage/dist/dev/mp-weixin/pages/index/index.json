@@ -1,4 +1,6 @@
 {
-  "navigationBarTitleText": "uni-app",
+  "navigationBarTitleText": "记吧单词",
+  "enablePullDownRefresh": true,
+  "navigationStyle": "custom",
   "usingComponents": {}
 }

@@ -3,6 +3,8 @@ Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 const common_vendor = require("./common/vendor.js");
 if (!Math) {
   "./pages/index/index.js";
+  "./pages/personal/index.js";
+  "./pages/search/index.js";
 }
 const _sfc_main = {
   onLaunch: function() {
@@ -15,7 +17,7 @@ const _sfc_main = {
     console.log("App Hide");
   }
 };
-const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "F:/HTML5/前端框架/记吧单词/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "F:/HTML5/前端框架/RememberWords/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   return {

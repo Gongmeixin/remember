@@ -1,1 +1,1 @@
-<view class="content"><image class="logo" src="/static/logo.png"></image><view class="text-area"><text class="title">{{a}}</text></view></view>
+<view><view class="navBarBox"><view class="statusBar" style="{{'padding-top:' + a}}"></view><view class="navBar"><view>记吧单词</view></view></view><view>我是页面内容</view></view>

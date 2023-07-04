@@ -3,15 +3,52 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "记吧单词",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
 			}
+		}, {
+			"path": "pages/personal/index",
+			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": true,
+				"navigationStyle": "custom"
+			}
+
+		}, {
+			"path": "pages/search/index",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": true
+			}
+
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#2979ff",
+		"backgroundColor": "#c7c9ce"
 	},
-	"uniIdRouter": {}
+	"uniIdRouter": {},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#2979ff",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"height": "50px",
+		"fontSize": "10px",
+		"iconWidth": "24px",
+		"spacing": "3px",
+		"list": [{
+			"pagePath": "pages/index/index",
+			"text": "首页",
+			"iconPath": "static/image/首页-置灰.png",
+			"selectedIconPath": "static/image/首页-置灰-copy.png"
+		}, {
+			"pagePath": "pages/personal/index",
+			"text": "个人中心",
+			"iconPath": "static/image/个人中心-置灰.png",
+			"selectedIconPath": "static/image/个人中心-置灰-copy.png"
+		}]
+	}
 }

@@ -1,0 +1,1 @@
+<view><view class="navBarBox"><view class="statusBar" style="{{'padding-top:' + a}}"></view><view class="navBar"><view>{{b}}</view></view></view></view>
