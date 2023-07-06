@@ -4,7 +4,7 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "记吧单词",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 		}, {

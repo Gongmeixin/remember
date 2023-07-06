@@ -12,7 +12,7 @@
 		flex-direction: row;
 		align-items: center;
 }
-.navBarBox .navBar view {
+.navTitle{
 		font-size: 16px;
 		font-weight: 700;
 }

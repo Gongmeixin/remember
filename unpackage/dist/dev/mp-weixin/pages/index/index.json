@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "记吧单词",
-  "enablePullDownRefresh": true,
+  "enablePullDownRefresh": false,
   "navigationStyle": "custom",
   "usingComponents": {}
 }
