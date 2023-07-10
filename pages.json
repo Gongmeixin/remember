@@ -23,7 +23,25 @@
 			}
 
 		}
-	],
+	    ,{
+            "path" : "pages/index/homework/homework",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "作业",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/index/homework/homeworkDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "作业",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#2979ff",

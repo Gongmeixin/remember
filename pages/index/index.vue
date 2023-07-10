@@ -15,8 +15,8 @@
 				<image src="../../static/image/哆啦A梦.jpg" mode="widthFix" class="bodyImg"></image>
 			</view>
 			<view class="button-box" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-440}px)`}">
-				<button class="mbutton uni-shadow-lg">开始作业</button>
-				<button class="mbutton uni-shadow-lg">听写</button>
+				<button class="mbutton uni-shadow-lg" @click="goHomeWork()" hover-class="hover">开始作业</button>
+				<button class="mbutton uni-shadow-lg" hover-class="hover">听写</button>
 			</view>
 			<view class="bottomView" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-44-300-50}px)`}">
 			</view>
@@ -39,7 +39,11 @@
 
 		},
 		methods: {
-
+			goHomeWork() {
+				uni.navigateTo({
+					url: 'homework/homework'
+				});
+			}
 		},
 		//第一次加载时调用
 		created() {
@@ -99,8 +103,8 @@
 		background-color: #94bcff;
 		position: absolute;
 	}
-	
-	.button-box{
+
+	.button-box {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
@@ -109,11 +113,20 @@
 		position: absolute;
 		z-index: 999;
 	}
+
 	.mbutton {
 		background-color: #2979ff;
 		color: white;
 		width: 100px;
 		height: 100px;
-		text-align: justify;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+	}
+	
+	.hover{
+		background-color: #94bcff;
+		top: 3px;
 	}
 </style>
