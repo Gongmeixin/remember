@@ -15,7 +15,7 @@
 				<image src="../../static/image/哆啦A梦.jpg" mode="widthFix" class="bodyImg"></image>
 			</view>
 			<view class="button-box" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-440}px)`}">
-				<button class="mbutton uni-shadow-lg" @click="goHomeWork()" hover-class="hover">开始作业</button>
+				<button class="mbutton uni-shadow-lg" @click="goHomeWork()" hover-class="hover">开始测试</button>
 				<button class="mbutton uni-shadow-lg" hover-class="hover">听写</button>
 			</view>
 			<view class="bottomView" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-44-300-50}px)`}">
@@ -100,7 +100,8 @@
 		border-radius: 1.5625rem 1.5625rem 0 0;
 		z-index: 1;
 		height: 18.75rem;
-		background-color: #94bcff;
+		background-color: rgb(255, 255, 255, 0.64);
+		backdrop-filter: blur(10px);
 		position: absolute;
 	}
 

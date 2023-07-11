@@ -8,13 +8,20 @@
 				@click="goHomeworkDetail()">开始作业</button>
 		</uni-section>
 	</view>
+	<view>
+		<!-- 提示窗示例 -->
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="warn" cancelText="取消" confirmText="确认" title="提示" :content="tipContent"
+				@confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
+		</uni-popup>
+	</view>
 </template>
 
 <script>
 	export default {
 		data() {
 			return {
-				classes: '1-1',
+				classes: '0',
 				dataTree: [{
 						text: "七年级英语",
 						value: "1-0",
@@ -93,25 +100,51 @@
 						}]
 					}
 				],
-				
+				tipContent: '',
+				selectInfo: [],
+				isGo: false
 			}
 		},
 		onLoad() {
-			this.db = uniCloud.database();
+			console.log('页面加载')
 		},
 		methods: {
 			onchange(e) {
 				console.log('onchange:', e);
-				console.log(typeof(e))
+				this.selectInfo = e.detail.value;
 			},
 
 			goHomeworkDetail() {
-				var mynavData = JSON.stringify(this.classes);
-				uni.navigateTo({
-					url: "homeworkDetail?class=" + mynavData
-				});
+				var msg = '';
+				for (var i = 0; i < this.selectInfo.length; i++) {
+					console.log(this.selectInfo[i].text);
+					msg += this.selectInfo[i].text;
+				}
+
+
+				if (msg != '') {
+					this.tipContent = `你即将进行《${msg}》的测试，是否确认？`;
+					this.isGo = true;
+				} else {
+					this.tipContent += '你未选择课程单元！！！'
+					this.isGo = false;
+				}
+				this.$refs.alertDialog.open();
+
+			},
+			dialogConfirm() {
+				console.log('点击了确认');
+				if (this.isGo) {
+					var mynavData = JSON.stringify(this.classes);
+					uni.navigateTo({
+						url: "homeworkDetail?class=" + mynavData
+					});
+				}
+			},
+			dialogClose() {
+				console.log('点击了取消')
 			}
-		}
+		},
 	}
 </script>
 

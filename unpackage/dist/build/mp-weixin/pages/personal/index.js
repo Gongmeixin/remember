@@ -1,0 +1,1 @@
+"use strict";const t=require("../../common/vendor.js"),e={data:()=>({text:"个人中心",statusBarHeight:0}),methods:{},created(){this.statusBarHeight=t.index.getSystemInfoSync().statusBarHeight}};const s=t._export_sfc(e,[["render",function(e,s,r,a,n,c){return{a:n.statusBarHeight+"px",b:t.t(n.text)}}]]);wx.createPage(s);

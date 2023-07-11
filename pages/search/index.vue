@@ -1,6 +1,6 @@
 <template>
 	<view>
-		
+		<button>查看答题情况</button>
 	</view>
 </template>
 

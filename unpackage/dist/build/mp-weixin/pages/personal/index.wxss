@@ -1,0 +1,1 @@
+.statusBar,.navBar{background-color:#2979ff}.navBar{height:44px}.navBarBox .navBar{padding:3rpx 50rpx 8rpx;display:flex;flex-direction:row;align-items:center}.navTitle{font-size:16px;font-weight:700}

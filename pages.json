@@ -27,7 +27,7 @@
             "path" : "pages/index/homework/homework",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "作业",
+                "navigationBarTitleText": "测试",
                 "enablePullDownRefresh": false
             }
             
@@ -36,7 +36,16 @@
             "path" : "pages/index/homework/homeworkDetail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "作业",
+                "navigationBarTitleText": "测试",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/personal/testDatile/testDatile",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "测试详情页",
                 "enablePullDownRefresh": false
             }
             
@@ -64,7 +73,7 @@
 			"selectedIconPath": "static/image/首页-置灰-copy.png"
 		}, {
 			"pagePath": "pages/personal/index",
-			"text": "个人中心",
+			"text": "我的",
 			"iconPath": "static/image/个人中心-置灰.png",
 			"selectedIconPath": "static/image/个人中心-置灰-copy.png"
 		}]

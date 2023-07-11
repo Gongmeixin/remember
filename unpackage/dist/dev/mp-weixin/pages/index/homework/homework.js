@@ -3,7 +3,7 @@ const common_vendor = require("../../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
-      classes: "1-1",
+      classes: "0",
       dataTree: [
         {
           text: "七年级英语",
@@ -84,34 +84,62 @@ const _sfc_main = {
             }]
           }]
         }
-      ]
+      ],
+      tipContent: "",
+      selectInfo: [],
+      isGo: false
     };
   },
   onLoad() {
-    this.db = common_vendor.Ds.database();
+    console.log("页面加载");
   },
   methods: {
     onchange(e) {
       console.log("onchange:", e);
-      console.log(typeof e);
+      this.selectInfo = e.detail.value;
     },
     goHomeworkDetail() {
-      var mynavData = JSON.stringify(this.classes);
-      common_vendor.index.navigateTo({
-        url: "homeworkDetail?class=" + mynavData
-      });
+      var msg = "";
+      for (var i = 0; i < this.selectInfo.length; i++) {
+        console.log(this.selectInfo[i].text);
+        msg += this.selectInfo[i].text;
+      }
+      if (msg != "") {
+        this.tipContent = `你即将进行《${msg}》的测试，是否确认？`;
+        this.isGo = true;
+      } else {
+        this.tipContent += "你未选择课程单元！！！";
+        this.isGo = false;
+      }
+      this.$refs.alertDialog.open();
+    },
+    dialogConfirm() {
+      console.log("点击了确认");
+      if (this.isGo) {
+        var mynavData = JSON.stringify(this.classes);
+        common_vendor.index.navigateTo({
+          url: "homeworkDetail?class=" + mynavData
+        });
+      }
+    },
+    dialogClose() {
+      console.log("点击了取消");
     }
   }
 };
 if (!Array) {
   const _easycom_uni_data_picker2 = common_vendor.resolveComponent("uni-data-picker");
   const _easycom_uni_section2 = common_vendor.resolveComponent("uni-section");
-  (_easycom_uni_data_picker2 + _easycom_uni_section2)();
+  const _easycom_uni_popup_dialog2 = common_vendor.resolveComponent("uni-popup-dialog");
+  const _easycom_uni_popup2 = common_vendor.resolveComponent("uni-popup");
+  (_easycom_uni_data_picker2 + _easycom_uni_section2 + _easycom_uni_popup_dialog2 + _easycom_uni_popup2)();
 }
 const _easycom_uni_data_picker = () => "../../../uni_modules/uni-data-picker/components/uni-data-picker/uni-data-picker.js";
 const _easycom_uni_section = () => "../../../uni_modules/uni-section/components/uni-section/uni-section.js";
+const _easycom_uni_popup_dialog = () => "../../../uni_modules/uni-popup/components/uni-popup-dialog/uni-popup-dialog.js";
+const _easycom_uni_popup = () => "../../../uni_modules/uni-popup/components/uni-popup/uni-popup.js";
 if (!Math) {
-  (_easycom_uni_data_picker + _easycom_uni_section)();
+  (_easycom_uni_data_picker + _easycom_uni_section + _easycom_uni_popup_dialog + _easycom_uni_popup)();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
@@ -128,6 +156,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       title: "选择您要测试的单元",
       type: "line",
       padding: true
+    }),
+    f: common_vendor.o($options.dialogConfirm),
+    g: common_vendor.o($options.dialogClose),
+    h: common_vendor.p({
+      type: "warn",
+      cancelText: "取消",
+      confirmText: "确认",
+      title: "提示",
+      content: $data.tipContent
+    }),
+    i: common_vendor.sr("alertDialog", "15f82a99-2"),
+    j: common_vendor.p({
+      type: "dialog"
     })
   };
 }

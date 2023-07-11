@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "记吧单词",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom",
+  "usingComponents": {}
+}
