@@ -15,11 +15,10 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    },
-    "condition": false
+    }
   },
   "compileType": "miniprogram",
-  "libVersion": "2.32.3",
+  "libVersion": "",
   "appid": "wx52d880560f439605",
   "projectname": "记吧单词",
   "condition": {},

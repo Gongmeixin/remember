@@ -1,0 +1,1 @@
+<view class=""><view class="mask"><view class="content"><button class="login-button" bindtap="{{b}}"><uni-icons wx:if="{{a}}" u-i="f489a5f0-0" bind:__l="__l" u-p="{{a}}"></uni-icons> 微信一键登录</button><uni-icons wx:if="{{d}}" class="clossIcon" bindclick="{{c}}" u-i="f489a5f0-1" bind:__l="__l" u-p="{{d}}"></uni-icons></view></view></view>

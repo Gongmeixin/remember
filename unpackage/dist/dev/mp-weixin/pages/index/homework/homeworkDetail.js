@@ -3,9 +3,9 @@ const common_vendor = require("../../../common/vendor.js");
 const _sfc_main = {
   data() {
     return {
-      testHour: 0,
-      testMinute: 1,
-      testSecond: 0,
+      testHour: 99,
+      testMinute: 99,
+      testSecond: 99,
       class: null,
       answerArr: [],
       total: 0,
@@ -34,7 +34,13 @@ const _sfc_main = {
         }
       }
     }
-    this.getWords();
+    common_vendor.index.showLoading({
+      title: "加载中...",
+      mask: true
+    }).then((res) => {
+      console.log(res);
+      this.getWords();
+    });
   },
   methods: {
     //倒计时结束
@@ -47,10 +53,8 @@ const _sfc_main = {
         duration: 2e3
       }).then((res) => {
         console.log(res);
-        common_vendor.index.switchTab({
-          url: "../index"
-        });
-        this.canBack = true;
+        this.SubmitAnswer();
+        this.backHome();
       });
     },
     //获取词库
@@ -73,6 +77,7 @@ const _sfc_main = {
           this.testMinute = parseInt(time / 60);
           this.testHour = parseInt(time / 3600);
           console.log(this.total, this.testHour, this.testMinute, this.testSecond);
+          common_vendor.index.hideLoading();
         });
       }
     },
@@ -81,7 +86,7 @@ const _sfc_main = {
       if (this.currentIndex >= 1) {
         let s = {
           id: this.currentIndex + 1,
-          word: this.userAnswer
+          userWord: this.userAnswer
         };
         this.saveAnswer(s.id, s.word);
         this.currentIndex--;
@@ -107,7 +112,7 @@ const _sfc_main = {
     },
     //答案是否已经存在
     isInUAnswerArr_word(word) {
-      if (this.userAnswerArr.findIndex((item) => item.word === word) <= -1) {
+      if (this.userAnswerArr.findIndex((item) => item.userWord === word) <= -1) {
         return false;
       } else {
         return true;
@@ -118,7 +123,7 @@ const _sfc_main = {
       if (this.isInUAnswerArr_id(index)) {
         this.userAnswerArr.forEach((item) => {
           if (item.id == index) {
-            this.userAnswer = item.word;
+            this.userAnswer = item.userWord;
           }
         });
       } else {
@@ -129,7 +134,10 @@ const _sfc_main = {
     saveAnswer(index, word) {
       let u = {
         id: index,
-        word
+        userWord: word,
+        unit: this.unitId,
+        word_id: this.answerArr[index - 1]._id
+        //openid:
       };
       console.log(u.id, this.isInUAnswerArr_id(u.id));
       if (!this.isInUAnswerArr_id(u.id) && this.userAnswer != "") {
@@ -153,9 +161,52 @@ const _sfc_main = {
     dialogConfirm() {
       console.log("点击了确认");
       this.canBack = true;
+      common_vendor.index.switchTab({
+        url: "../index"
+      });
     },
     dialogClose() {
       console.log("点击了取消");
+    },
+    //上传答案
+    SubmitAnswer() {
+      common_vendor.index.showLoading({
+        title: "正在提交...",
+        mask: true
+      }).then((res) => {
+        common_vendor.Ds.callFunction({
+          name: "UploadAnswer",
+          data: {
+            userAnswer: this.userAnswerArr
+          }
+        }).then((res2) => {
+          console.log(res2);
+          this.backHome();
+        });
+      });
+    },
+    backHome() {
+      common_vendor.index.hideLoading().then((res) => {
+        common_vendor.index.showToast({
+          title: "提交成功",
+          //将值设置为 success 或者直接不用写icon这个参数
+          icon: "success",
+          //显示持续时间为 2秒
+          duration: 2e3
+        }).then((res2) => {
+          common_vendor.index.switchTab({
+            url: "../index"
+          });
+          this.canBack = true;
+        });
+      });
+    },
+    fpNumInput(e) {
+      const o = e.detail;
+      const inputRule = /[^a-zA-Z]/g;
+      this.$nextTick(function() {
+        this.userAnswer = o.value.replace(inputRule, "");
+      });
     }
   },
   onBackPress(event) {
@@ -204,35 +255,39 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         c: item._id
       };
     }),
-    e: $data.userAnswer,
-    f: common_vendor.o(($event) => $data.userAnswer = $event.detail.value),
+    e: common_vendor.o([($event) => $data.userAnswer = $event.detail.value, (...args) => $options.fpNumInput && $options.fpNumInput(...args)]),
+    f: $data.userAnswer,
     g: common_vendor.n($data.currentIndex == 0 ? "notSelect" : ""),
     h: common_vendor.o(($event) => $options.lastOne()),
     i: common_vendor.t($data.currentIndex + 1 + "/" + $data.total),
     j: common_vendor.n($data.currentIndex == $data.answerArr.length - 1 ? "notSelect" : ""),
     k: common_vendor.o(($event) => $options.nextOne()),
-    l: $data.isShow,
-    m: common_vendor.p({
+    l: $data.currentIndex < $data.answerArr.length - 1,
+    m: common_vendor.n($data.currentIndex == $data.answerArr.length - 1 ? "" : "notSelect"),
+    n: common_vendor.o(($event) => $options.SubmitAnswer()),
+    o: $data.currentIndex >= $data.answerArr.length - 1,
+    p: $data.isShow,
+    q: common_vendor.p({
       ["show-icon"]: true,
       scrollable: true,
       text: "暂无该单元的数据,试试别的功能吧!"
     }),
-    n: common_vendor.p({
+    r: common_vendor.p({
       title: "提示",
       type: "line"
     }),
-    o: !$data.isShow,
-    p: common_vendor.o($options.dialogConfirm),
-    q: common_vendor.o($options.dialogClose),
-    r: common_vendor.p({
+    s: !$data.isShow,
+    t: common_vendor.o($options.dialogConfirm),
+    v: common_vendor.o($options.dialogClose),
+    w: common_vendor.p({
       type: "warn",
       cancelText: "取消",
       confirmText: "确认",
       title: "提示",
       content: $data.tipContent
     }),
-    s: common_vendor.sr("alertDialog", "7a6c6c6c-4"),
-    t: common_vendor.p({
+    x: common_vendor.sr("alertDialog", "7a6c6c6c-4"),
+    y: common_vendor.p({
       type: "dialog"
     })
   };

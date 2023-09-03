@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "作业",
+  "navigationBarTitleText": "测试",
   "enablePullDownRefresh": false,
   "usingComponents": {
     "uni-data-picker": "../../../uni_modules/uni-data-picker/components/uni-data-picker/uni-data-picker",

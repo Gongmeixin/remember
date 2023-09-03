@@ -22,39 +22,51 @@
 				"enablePullDownRefresh": true
 			}
 
+		}, {
+			"path": "pages/index/homework/homework",
+			"style": {
+				"navigationBarTitleText": "测试",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/homework/homeworkDetail",
+			"style": {
+				"navigationBarTitleText": "测试",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/personal/testDatile/testDatile",
+			"style": {
+				"navigationBarTitleText": "测试详情页",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/personal/personalInfo/personalInfo",
+			"style": {
+				"navigationBarTitleText": "个人资料",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "components/login/login",
+			"style": {
+				"navigationStyle": "custom",
+				"app-plus": {
+					"animationType": "fade-in", //动画效果
+					"background": "transparent", //背景透明
+					"backgroundColor": "rgba(0,0,0,0)", //背景透明
+					"popGesture": "none" //禁止苹果侧滑返回
+				}
+			}
 		}
-	    ,{
-            "path" : "pages/index/homework/homework",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "测试",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/index/homework/homeworkDetail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "测试",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/personal/testDatile/testDatile",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "测试详情页",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#2979ff",
-		"backgroundColor": "#c7c9ce"
+		"backgroundColor": "#c7c9ce",
+		"autoscan": true
 	},
 	"uniIdRouter": {},
 	"tabBar": {

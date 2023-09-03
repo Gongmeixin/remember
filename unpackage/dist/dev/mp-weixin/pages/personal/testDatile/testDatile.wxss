@@ -1,0 +1,41 @@
+
+.answerList {
+		width: 100%;
+		height: 100%;
+}
+.answerList ul {
+		list-style-type: none;
+		padding: 0;
+}
+.answerCard {
+		width: 100%;
+		height: 250rpx;
+		background-color: #fff;
+		margin-top: 20rpx;
+		border-radius: 25rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-around;
+}
+.card_top {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-around;
+}
+.card_bottom {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+}
+.answerFont {
+		margin-top: 10rpx;
+}
+.answerFont text {
+		font-weight: 700;
+}
+.top_left,
+	.top-right {
+		margin: 10rpx;
+}

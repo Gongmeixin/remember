@@ -40,10 +40,25 @@
 		},
 		methods: {
 			goHomeWork() {
-				uni.navigateTo({
-					url: 'homework/homework'
+				let _this = this;
+				let openid = '';
+				uni.getStorage({
+					key: 'openid',
+				}).then(res => {
+					console.log(res);
 				});
-			}
+
+				if (openid == '') {
+					uni.navigateTo({
+						url: '../../components/login/login'
+					});
+				} else {
+					uni.navigateTo({
+						url: 'homework/homework'
+					});
+				}
+
+			},
 		},
 		//第一次加载时调用
 		created() {
@@ -67,7 +82,7 @@
 	}
 
 	.navBarBox .navBar {
-		padding: 3rpx 45rpx;
+		padding: 3rpx 50rpx;
 		padding-bottom: 8rpx;
 		display: flex;
 		flex-direction: row;
@@ -125,8 +140,8 @@
 		justify-content: center;
 		border-radius: 50%;
 	}
-	
-	.hover{
+
+	.hover {
 		background-color: #94bcff;
 		top: 3px;
 	}

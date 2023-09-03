@@ -7,6 +7,9 @@ if (!Math) {
   "./pages/search/index.js";
   "./pages/index/homework/homework.js";
   "./pages/index/homework/homeworkDetail.js";
+  "./pages/personal/testDatile/testDatile.js";
+  "./pages/personal/personalInfo/personalInfo.js";
+  "./components/login/login.js";
 }
 const _sfc_main = {
   onLaunch: function() {

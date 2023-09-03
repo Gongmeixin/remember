@@ -9,10 +9,10 @@
 				<view class="navTitle">{{text}}</view>
 			</view>
 			<view class="mainPage">
-				<view class="p_top">
-					<view class="p_photo">
-						<img src="../../static/image/logo.png" alt="">
-						<text style="margin-top: 20rpx;">昵称</text>
+				<view class="p_top" :style="{ backgroundImage: `url(${userInfo.avatarUrl})`,}">
+					<view class="p_photo" @click="weixinLogin()">
+						<img class="pPhoto" :src="userInfo.avatarUrl">
+						<text style="margin-top: 20rpx;">{{userInfo.nickName}}</text>
 					</view>
 				</view>
 				<view class="p_top_bottom uni-shadow-lg">
@@ -28,6 +28,10 @@
 				</view>
 				<view class="lookTest uni-shadow-lg" @click="goTestDetail">
 					<text style="padding-left: 50rpx;">查看测试</text>
+					<uni-icons type="forward" size="30"></uni-icons>
+				</view>
+				<view class="aboutUs uni-shadow-lg" @click="goPersonalInfo()">
+					<text style="padding-left: 50rpx;">个人资料</text>
 					<uni-icons type="forward" size="30"></uni-icons>
 				</view>
 				<view class="aboutUs uni-shadow-lg">
@@ -47,7 +51,11 @@
 				// 状态栏高度
 				statusBarHeight: 0,
 				studyNum: 0,
-				reviewNum: 0
+				reviewNum: 0,
+				userInfo: {
+					avatarUrl: '../../static/image/logo.png',
+					nickName: '昵称'
+				}
 			}
 		},
 		methods: {
@@ -55,15 +63,46 @@
 				uni.navigateTo({
 					url: 'testDatile/testDatile'
 				});
-			}
-		},
-		//第一次加载时调用
+			},
+			goPersonalInfo() {
+				uni.navigateTo({
+					url: 'personalInfo/personalInfo'
+				});
+			},
+			weixinLogin() {
+				uni.login({
+					provider: 'weixin', //使用微信登录
+					success: function(loginRes) {
+						console.log(loginRes.code);
+						uni.request({
+							url: 'https://api.weixin.qq.com/sns/jscode2session',
+							data: {
+								'appid': 'wx52d880560f439605',
+								'secret': 'a874878c77ccb8dc3b0e599503379899',
+								'js_code': loginRes.code,
+								'grant_type': 'authorization_code'
+							},
+							method: 'GET',
+							success: res => {
+								console.log(res);
+							},
+							fail: err => {
+								console.log(err)
+							}
+						});
+					}
+				});
+			},
+			getStatusBarHeight() {
+				var systemInfo = uni.getSystemInfoSync()
+				this.statusBarHeight = systemInfo['statusBarHeight'];
+				console.log(this.statusBarHeight)
+			},
+		}, //第一次加载时调用
 		created() {
 			//获取手机状态栏高度
-			this.statusBarHeight = uni.getSystemInfoSync()['statusBarHeight'];
+			this.getStatusBarHeight()
 		},
-
-
 	}
 </script>
 
@@ -74,7 +113,7 @@
 	}
 
 	.navBar {
-		height: 44px;
+		height: 2.75rem;
 	}
 
 	.navBarBox .navBar {
@@ -86,7 +125,7 @@
 	}
 
 	.navTitle {
-		font-size: 16px;
+		font-size: 1rem;
 		font-weight: 700;
 	}
 
@@ -94,12 +133,13 @@
 		width: 100%;
 		height: 400rpx;
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0.64) 45%),
-			url(../../static/image/logo.png);
-		/* background-attachment: fixed; */
+		-webkit-backdrop-filter: blur(10px);
 		backdrop-filter: blur(50px);
+		background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 45%);
+		/* background-attachment: fixed; */
 		background-position: center;
 	}
 
@@ -111,7 +151,7 @@
 		text-align: center;
 	}
 
-	.p_photo img {
+	.pPhoto {
 		height: 100%;
 		width: 100%;
 	}

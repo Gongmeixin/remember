@@ -12,15 +12,16 @@
 			</li>
 		</ul>
 		<input type="text" name="userAnswer" id="userAnswer" class="userInput" placeholder="请输入您的答案..."
-			v-model="userAnswer">
+			v-model="userAnswer" maxlength="45" @input="fpNumInput">
 		<view class="pageBottom">
 			<button v-bind:class="['selectButton',currentIndex==0?'notSelect':'']" @click="lastOne()"
 				hover-class="notSelect">上一题</button>
 			<span>{{currentIndex+1+"/"+total}}</span>
 			<button v-bind:class="['selectButton',currentIndex==answerArr.length-1?'notSelect':'']" @click="nextOne()"
 				hover-class="notSelect" v-show="currentIndex < answerArr.length-1">下一题</button>
-			<button v-bind:class="['selectButton',currentIndex==answerArr.length-1?'':'notSelect']" @click="SubmitAnswer()"
-				hover-class="notSelect" v-show="currentIndex >= answerArr.length-1">提交答案</button>
+			<button v-bind:class="['selectButton',currentIndex==answerArr.length-1?'':'notSelect']"
+				@click="SubmitAnswer()" hover-class="notSelect"
+				v-show="currentIndex >= answerArr.length-1">提交答案</button>
 		</view>
 	</view>
 	<view v-show="!isShow">
@@ -41,9 +42,9 @@
 	export default {
 		data() {
 			return {
-				testHour: 0,
-				testMinute: 1,
-				testSecond: 0,
+				testHour: 99,
+				testMinute: 99,
+				testSecond: 99,
 				class: null,
 				answerArr: [],
 				total: 0,
@@ -72,7 +73,14 @@
 					}
 				}
 			}
-			this.getWords();
+
+			uni.showLoading({
+				title: '加载中...',
+				mask: true,
+			}).then(res => {
+				console.log(res);
+				this.getWords();
+			});
 
 		},
 		methods: {
@@ -110,6 +118,7 @@
 						this.testMinute = parseInt(time / 60);
 						this.testHour = parseInt(time / 3600);
 						console.log(this.total, this.testHour, this.testMinute, this.testSecond)
+						uni.hideLoading();
 					});
 				}
 
@@ -119,7 +128,7 @@
 				if (this.currentIndex >= 1) {
 					let s = {
 						id: this.currentIndex + 1,
-						word: this.userAnswer
+						userWord: this.userAnswer
 					};
 					this.saveAnswer(s.id, s.word);
 					this.currentIndex--;
@@ -145,7 +154,7 @@
 			},
 			//答案是否已经存在
 			isInUAnswerArr_word(word) {
-				if (this.userAnswerArr.findIndex(item => item.word === word) <= -1) {
+				if (this.userAnswerArr.findIndex(item => item.userWord === word) <= -1) {
 					return false;
 				} else {
 					return true;
@@ -156,7 +165,7 @@
 				if (this.isInUAnswerArr_id(index)) {
 					this.userAnswerArr.forEach(item => {
 						if (item.id == index) {
-							this.userAnswer = item.word;
+							this.userAnswer = item.userWord;
 						}
 					})
 				} else {
@@ -167,7 +176,10 @@
 			saveAnswer(index, word) {
 				let u = {
 					id: index,
-					word: word
+					userWord: word,
+					unit: this.unitId,
+					word_id:this.answerArr[index-1]._id
+					//openid:
 				};
 				console.log(u.id, this.isInUAnswerArr_id(u.id))
 				if (!this.isInUAnswerArr_id(u.id) && this.userAnswer != '') {
@@ -201,21 +213,45 @@
 			},
 			//上传答案
 			SubmitAnswer() {
-				uniCloud.callFunction({
-					name: 'UploadAnswer',
-					data: {
-						userAnswer: this.userAnswerArr
-					}
+				uni.showLoading({
+					title: '正在提交...',
+					mask: true,
 				}).then(res => {
-					console.log(res);
-					this.backHome();
+					uniCloud.callFunction({
+						name: 'UploadAnswer',
+						data: {
+							userAnswer: this.userAnswerArr
+						}
+					}).then(res => {
+						console.log(res);
+						this.backHome();
+					});
 				});
+
 			},
-			backHome(){
-				uni.switchTab({
-					url: "../index"
+			backHome() {
+				uni.hideLoading().then(res => {
+					uni.showToast({
+						title: '提交成功',
+						//将值设置为 success 或者直接不用写icon这个参数
+						icon: 'success',
+						//显示持续时间为 2秒
+						duration: 2000
+					}).then(res => {
+						uni.switchTab({
+							url: "../index"
+						});
+						this.canBack = true;
+					});
 				});
-				this.canBack = true;
+
+			},
+			fpNumInput(e) {
+				const o = e.detail;
+				const inputRule = /[^a-zA-Z]/g //修改inputRule 的值
+				this.$nextTick(function() {
+					this.userAnswer = o.value.replace(inputRule, '');
+				});
 			}
 		},
 		onBackPress(event) {

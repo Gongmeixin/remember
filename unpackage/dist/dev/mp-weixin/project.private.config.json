@@ -3,5 +3,6 @@
   "projectname": "记吧单词",
   "setting": {
     "compileHotReLoad": true
-  }
+  },
+  "libVersion": "3.0.1"
 }

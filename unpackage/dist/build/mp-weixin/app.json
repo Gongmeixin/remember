@@ -4,7 +4,8 @@
     "pages/personal/index",
     "pages/search/index",
     "pages/index/homework/homework",
-    "pages/index/homework/homeworkDetail"
+    "pages/index/homework/homeworkDetail",
+    "pages/personal/testDatile/testDatile"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -25,7 +26,7 @@
       },
       {
         "pagePath": "pages/personal/index",
-        "text": "个人中心",
+        "text": "我的",
         "iconPath": "static/image/个人中心-置灰.png",
         "selectedIconPath": "static/image/个人中心-置灰-copy.png"
       }
