@@ -1,16 +1,29 @@
 <template>
 	<view>
 		<view class="uni-common-mt">
-			<uni-forms ref="form">
-				<uni-forms-item required label="手机号" name="mob" class="uni-form-item uni-column user-input">
-					<uni-easyinput v-model="information.phonNum" placeholder="手机号" class="input"/>
+			<view class="avater-view">
+				<button open-type='chooseAvatar' @chooseavatar="onChooseAvatar" class="avater-button">
+					<img :src="information.avatarUrl" alt="头像" class="avatar-img">
+				</button>
+			</view>
+			<uni-forms ref="baseForm" :modelValue="information" :rules="rules">
+				<uni-forms-item label="姓名" required name="name" class="user-input">
+					<uni-easyinput type="text" v-model="information.username" placeholder="请输入姓名" class="user-input" />
 				</uni-forms-item>
-				<uni-forms-item required label="身份证" name="id_num">
-					<uni-easyinput v-model="information.phonNum" placeholder="身份证" />
+				<uni-forms-item label="学校" required name="school">
+					<uni-easyinput type="text" v-model="information.school" placeholder="请输入您所在学校" class="user-input" />
+				</uni-forms-item>
+				<uni-forms-item label="班级" required name="class">
+					<uni-easyinput type="text" v-model="information.classId" placeholder="您所在学校的班级"
+						class="user-input" />
+				</uni-forms-item>
+				<uni-forms-item label="手机" required name="phone">
+					<uni-easyinput type="text" v-model="information.phonNum" placeholder="我们可以成功与您沟通的联系方式"
+						class="user-input" />
 				</uni-forms-item>
 			</uni-forms>
 
-			<view class="avater-view">
+			<!-- <view class="avater-view">
 				<button open-type='chooseAvatar' @chooseavatar="onChooseAvatar" class="avater-button">
 					<img :src="information.avatarUrl" alt="头像" class="avatar-img">
 				</button>
@@ -44,12 +57,13 @@
 					<input class="uni-input" type="number" v-model="information.phonNum" maxlength="11"
 						placeholder="我们可以成功与您沟通的联系方式" />
 				</view>
-			</view>
+			</view> -->
 		</view>
 
 		<button class="up-button" @click="upInfo()">
 			<text v-if="!isExit">提交</text>
 			<text v-else="isExit">修改</text>信息</button>
+		<button class="back-btn" @click="goBack">不用修改，直接使用>></button>
 	</view>
 </template>
 
@@ -65,14 +79,35 @@
 					classId: '',
 					phonNum: ''
 				},
-				isExit: true
-
+				isExit: true,
+				rules: {
+					name: {
+						rules: [{
+								required: true,
+								errorMessage: '请输入姓名',
+							},
+							{
+								minLength: 3,
+								maxLength: 5,
+								errorMessage: '姓名长度在 {minLength} 到 {maxLength} 个字符',
+							}
+						]
+					},
+					shcool: {
+						rules: [{
+							format: 'email',
+							errorMessage: '请输入正确的邮箱地址',
+						}]
+					},
+					class: {},
+					phone: {}
+				}
 			};
 		},
 		// 进入页面从缓存获取用户openid
 		onShow() {
 			var that = this;
-			wx.getStorage({
+			uni.getStorage({
 				key: 'openid',
 				success(res) {
 					that.information.openid = res.data;
@@ -113,6 +148,15 @@
 					this.information = res.result.data[0];
 				});
 			},
+
+			goBack() {
+				var pages = getCurrentPages();
+				console.log(pages.length);
+				var pageLen = pages.length - 1;
+				uni.navigateBack({
+					delta: pageLen
+				});
+			}
 		}
 	}
 </script>
@@ -127,13 +171,6 @@
 			width: 280px;
 			margin-left: 20px;
 		}
-	}
-
-	.fenjie {
-		width: 335px;
-		height: 1px;
-		background: #ddd;
-		margin: 0 auto;
 	}
 
 	.up-button {
@@ -182,5 +219,15 @@
 	.avatar-img {
 		height: 100%;
 		width: 100%;
+	}
+
+	.back-btn::after {
+		border: none;
+	}
+
+	.back-btn {
+		background-color: #00000000;
+		color: #488ac7;
+		font-size: 16px;
 	}
 </style>

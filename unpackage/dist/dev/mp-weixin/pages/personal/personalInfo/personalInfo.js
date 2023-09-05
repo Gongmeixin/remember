@@ -11,13 +11,36 @@ const _sfc_main = {
         classId: "",
         phonNum: ""
       },
-      isExit: true
+      isExit: true,
+      rules: {
+        name: {
+          rules: [
+            {
+              required: true,
+              errorMessage: "请输入姓名"
+            },
+            {
+              minLength: 3,
+              maxLength: 5,
+              errorMessage: "姓名长度在 {minLength} 到 {maxLength} 个字符"
+            }
+          ]
+        },
+        shcool: {
+          rules: [{
+            format: "email",
+            errorMessage: "请输入正确的邮箱地址"
+          }]
+        },
+        class: {},
+        phone: {}
+      }
     };
   },
   // 进入页面从缓存获取用户openid
   onShow() {
     var that = this;
-    common_vendor.wx$1.getStorage({
+    common_vendor.index.getStorage({
       key: "openid",
       success(res) {
         that.information.openid = res.data;
@@ -54,6 +77,14 @@ const _sfc_main = {
         console.log(res.result.data[0]);
         this.information = res.result.data[0];
       });
+    },
+    goBack() {
+      var pages = getCurrentPages();
+      console.log(pages.length);
+      var pageLen = pages.length - 1;
+      common_vendor.index.navigateBack({
+        delta: pageLen
+      });
     }
   }
 };
@@ -71,41 +102,62 @@ if (!Math) {
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
-    a: common_vendor.o(($event) => $data.information.phonNum = $event),
-    b: common_vendor.p({
-      placeholder: "手机号",
-      modelValue: $data.information.phonNum
+    a: $data.information.avatarUrl,
+    b: common_vendor.o((...args) => $options.onChooseAvatar && $options.onChooseAvatar(...args)),
+    c: common_vendor.o(($event) => $data.information.username = $event),
+    d: common_vendor.p({
+      type: "text",
+      placeholder: "请输入姓名",
+      modelValue: $data.information.username
     }),
-    c: common_vendor.p({
-      required: true,
-      label: "手机号",
-      name: "mob"
-    }),
-    d: common_vendor.o(($event) => $data.information.phonNum = $event),
     e: common_vendor.p({
-      placeholder: "身份证",
+      label: "姓名",
+      required: true,
+      name: "name"
+    }),
+    f: common_vendor.o(($event) => $data.information.school = $event),
+    g: common_vendor.p({
+      type: "text",
+      placeholder: "请输入您所在学校",
+      modelValue: $data.information.school
+    }),
+    h: common_vendor.p({
+      label: "学校",
+      required: true,
+      name: "school"
+    }),
+    i: common_vendor.o(($event) => $data.information.classId = $event),
+    j: common_vendor.p({
+      type: "text",
+      placeholder: "您所在学校的班级",
+      modelValue: $data.information.classId
+    }),
+    k: common_vendor.p({
+      label: "班级",
+      required: true,
+      name: "class"
+    }),
+    l: common_vendor.o(($event) => $data.information.phonNum = $event),
+    m: common_vendor.p({
+      type: "text",
+      placeholder: "我们可以成功与您沟通的联系方式",
       modelValue: $data.information.phonNum
     }),
-    f: common_vendor.p({
+    n: common_vendor.p({
+      label: "手机",
       required: true,
-      label: "身份证",
-      name: "id_num"
+      name: "phone"
     }),
-    g: common_vendor.sr("form", "81ddb26e-0"),
-    h: $data.information.avatarUrl,
-    i: common_vendor.o((...args) => $options.onChooseAvatar && $options.onChooseAvatar(...args)),
-    j: $data.information.username,
-    k: common_vendor.o(($event) => $data.information.username = $event.detail.value),
-    l: $data.information.school,
-    m: common_vendor.o(($event) => $data.information.school = $event.detail.value),
-    n: $data.information.classId,
-    o: common_vendor.o(($event) => $data.information.classId = $event.detail.value),
-    p: $data.information.phonNum,
-    q: common_vendor.o(($event) => $data.information.phonNum = $event.detail.value),
-    r: !$data.isExit
+    o: common_vendor.sr("baseForm", "81ddb26e-0"),
+    p: common_vendor.p({
+      modelValue: $data.information,
+      rules: $data.rules
+    }),
+    q: !$data.isExit
   }, !$data.isExit ? {} : {}, {
-    s: $data.isExit,
-    t: common_vendor.o(($event) => $options.upInfo())
+    r: $data.isExit,
+    s: common_vendor.o(($event) => $options.upInfo()),
+    t: common_vendor.o((...args) => $options.goBack && $options.goBack(...args))
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "F:/HTML5/前端框架/RememberWords/pages/personal/personalInfo/personalInfo.vue"]]);

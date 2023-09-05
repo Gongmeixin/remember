@@ -17,10 +17,19 @@ const _sfc_main = {
       unitId: 0,
       isShow: true,
       tipContent: "",
-      canBack: false
+      canBack: false,
+      openid: ""
     };
   },
   onLoad(option) {
+    var that = this;
+    common_vendor.index.getStorage({
+      key: "openid",
+      success(res) {
+        that.openid = res.data;
+        console.log(that.openid);
+      }
+    });
     console.log(option);
     this.class = JSON.parse(option.class);
     var selectdetail = this.class.split("-");
@@ -60,6 +69,7 @@ const _sfc_main = {
     //获取词库
     getWords() {
       if (this.unitId == 0) {
+        common_vendor.index.hideLoading();
         this.isShow = false;
       } else {
         console.log(this.unitId);
@@ -136,8 +146,8 @@ const _sfc_main = {
         id: index,
         userWord: word,
         unit: this.unitId,
-        word_id: this.answerArr[index - 1]._id
-        //openid:
+        word_id: this.answerArr[index - 1]._id,
+        openid: this.openid
       };
       console.log(u.id, this.isInUAnswerArr_id(u.id));
       if (!this.isInUAnswerArr_id(u.id) && this.userAnswer != "") {
@@ -181,6 +191,21 @@ const _sfc_main = {
           }
         }).then((res2) => {
           console.log(res2);
+          common_vendor.index.showToast({
+            title: "提交成功！",
+            icon: "success",
+            duration: 2e3,
+            mask: true
+          });
+          this.backHome();
+        }).catch((err) => {
+          console.log(err);
+          common_vendor.index.showToast({
+            title: err,
+            icon: "none",
+            duration: 2e3,
+            mask: true
+          });
           this.backHome();
         });
       });
@@ -197,7 +222,6 @@ const _sfc_main = {
           common_vendor.index.switchTab({
             url: "../index"
           });
-          this.canBack = true;
         });
       });
     },
@@ -209,14 +233,8 @@ const _sfc_main = {
       });
     }
   },
-  onBackPress(event) {
-    console.log(this.unitId != 0, !this.canBack);
-    if (this.unitId != 0 && !this.canBack) {
-      this.tipContent = "你还未完成所有题目，退出将失去所有的答案！";
-      this.$refs.alertDialog.open();
-      console.log("卸载页面");
-      return !this.canBack;
-    }
+  onHide() {
+    common_vendor.index.showLoading();
   }
 };
 if (!Array) {

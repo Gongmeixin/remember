@@ -56,10 +56,19 @@
 				unitId: 0,
 				isShow: true,
 				tipContent: '',
-				canBack: false
+				canBack: false,
+				openid: ''
 			}
 		},
 		onLoad(option) {
+			var that = this;
+			uni.getStorage({
+				key: 'openid',
+				success(res) {
+					that.openid = res.data;
+					console.log(that.openid);
+				}
+			});
 			console.log(option);
 			this.class = JSON.parse(option.class); // 字符串转对象
 			var selectdetail = this.class.split("-");
@@ -81,7 +90,6 @@
 				console.log(res);
 				this.getWords();
 			});
-
 		},
 		methods: {
 			//倒计时结束
@@ -101,6 +109,7 @@
 			//获取词库
 			getWords() {
 				if (this.unitId == 0) {
+					uni.hideLoading();
 					this.isShow = false;
 				} else {
 					console.log(this.unitId)
@@ -178,8 +187,8 @@
 					id: index,
 					userWord: word,
 					unit: this.unitId,
-					word_id:this.answerArr[index-1]._id
-					//openid:
+					word_id: this.answerArr[index - 1]._id,
+					openid: this.openid
 				};
 				console.log(u.id, this.isInUAnswerArr_id(u.id))
 				if (!this.isInUAnswerArr_id(u.id) && this.userAnswer != '') {
@@ -224,6 +233,22 @@
 						}
 					}).then(res => {
 						console.log(res);
+						uni.showToast({
+							title: '提交成功！',
+							icon: 'success',
+							duration: 2000,
+							mask:true
+
+						});
+						this.backHome();
+					}).catch(err=>{
+						console.log(err);
+						uni.showToast({
+							title:err,
+							icon:'none',
+							duration:2000,
+							mask:true
+						})
 						this.backHome();
 					});
 				});
@@ -241,7 +266,6 @@
 						uni.switchTab({
 							url: "../index"
 						});
-						this.canBack = true;
 					});
 				});
 
@@ -254,14 +278,8 @@
 				});
 			}
 		},
-		onBackPress(event) {
-			console.log(this.unitId != 0, !this.canBack);
-			if (this.unitId != 0 && !this.canBack) {
-				this.tipContent = '你还未完成所有题目，退出将失去所有的答案！'
-				this.$refs.alertDialog.open();
-				console.log('卸载页面');
-				return !this.canBack;
-			}
+		onHide() {
+			uni.showLoading()
 		}
 	}
 </script>

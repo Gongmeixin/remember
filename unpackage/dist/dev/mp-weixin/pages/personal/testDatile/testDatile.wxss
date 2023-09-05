@@ -39,3 +39,9 @@
 	.top-right {
 		margin: 10rpx;
 }
+.uni-common-mt {
+		margin-top: 10px;
+}
+.uni-padding-wrap {
+		padding: 0px 30px;
+}

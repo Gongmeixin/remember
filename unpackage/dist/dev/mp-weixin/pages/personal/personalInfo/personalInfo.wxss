@@ -32,12 +32,6 @@
   width: 280px;
   margin-left: 20px;
 }
-.fenjie {
-  width: 335px;
-  height: 1px;
-  background: #ddd;
-  margin: 0 auto;
-}
 .up-button {
   width: 160px;
   height: 40px;
@@ -78,4 +72,12 @@
 .avatar-img {
   height: 100%;
   width: 100%;
+}
+.back-btn::after {
+  border: none;
+}
+.back-btn {
+  background-color: #00000000;
+  color: #488ac7;
+  font-size: 16px;
 }

@@ -36,28 +36,25 @@
 			}
 		},
 		onLoad() {
-
+			
 		},
 		methods: {
 			goHomeWork() {
 				let _this = this;
-				let openid = '';
 				uni.getStorage({
 					key: 'openid',
 				}).then(res => {
-					console.log(res);
+					console.log(res.data);
+					if (res.data == '') {
+						uni.navigateTo({
+							url: '../../components/login/login'
+						});
+					} else {
+						uni.navigateTo({
+							url: 'homework/homework'
+						});
+					}
 				});
-
-				if (openid == '') {
-					uni.navigateTo({
-						url: '../../components/login/login'
-					});
-				} else {
-					uni.navigateTo({
-						url: 'homework/homework'
-					});
-				}
-
 			},
 		},
 		//第一次加载时调用

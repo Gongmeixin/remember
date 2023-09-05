@@ -11,8 +11,11 @@ const _sfc_main = {
       userInfo: {
         avatarUrl: "../../static/image/logo.png",
         nickName: "昵称"
-      }
+      },
+      isShowLoginButton: true
     };
+  },
+  onShow: function() {
   },
   methods: {
     goTestDetail() {
@@ -21,44 +24,58 @@ const _sfc_main = {
       });
     },
     goPersonalInfo() {
-      common_vendor.index.navigateTo({
-        url: "personalInfo/personalInfo"
-      });
+      if (this.isShowLoginButton) {
+        common_vendor.index.showToast({
+          title: "您未登录，请先登录！",
+          icon: "none",
+          //显示持续时间为 2秒
+          duration: 2e3
+        });
+      } else {
+        common_vendor.index.navigateTo({
+          url: "personalInfo/personalInfo"
+        });
+      }
     },
     weixinLogin() {
-      common_vendor.index.login({
-        provider: "weixin",
-        //使用微信登录
-        success: function(loginRes) {
-          console.log(loginRes.code);
-          common_vendor.index.request({
-            url: "https://api.weixin.qq.com/sns/jscode2session",
-            data: {
-              "appid": "wx52d880560f439605",
-              "secret": "a874878c77ccb8dc3b0e599503379899",
-              "js_code": loginRes.code,
-              "grant_type": "authorization_code"
-            },
-            method: "GET",
-            success: (res) => {
-              console.log(res);
-            },
-            fail: (err) => {
-              console.log(err);
-            }
-          });
-        }
+      common_vendor.index.navigateTo({
+        url: "../../components/login/login"
       });
     },
     getStatusBarHeight() {
       var systemInfo = common_vendor.index.getSystemInfoSync();
       this.statusBarHeight = systemInfo["statusBarHeight"];
       console.log(this.statusBarHeight);
+    },
+    getUserInfo(id) {
+      common_vendor.Ds.callFunction({
+        name: "getUserInfo",
+        data: {
+          openid: id
+        }
+      }).then((res) => {
+        console.log(res.result.data[0]);
+        this.userInfo.avatarUrl = res.result.data[0].avatarUrl;
+        this.userInfo.nickName = res.result.data[0].username;
+      });
     }
   },
   //第一次加载时调用
   created() {
     this.getStatusBarHeight();
+    let that = this;
+    common_vendor.index.getStorage({
+      key: "openid",
+      success(res) {
+        console.log(res.data);
+        if (res.data == "") {
+          that.isShowLoginButton = true;
+        } else {
+          that.isShowLoginButton = false;
+          that.getUserInfo(res.data);
+        }
+      }
+    });
   }
 };
 if (!Array) {
@@ -70,13 +87,15 @@ if (!Math) {
   _easycom_uni_icons();
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return {
+  return common_vendor.e({
     a: $data.statusBarHeight + "px",
     b: common_vendor.t($data.text),
     c: $data.userInfo.avatarUrl,
     d: common_vendor.t($data.userInfo.nickName),
-    e: common_vendor.o(($event) => $options.weixinLogin()),
-    f: `url(${$data.userInfo.avatarUrl})`,
+    e: $data.isShowLoginButton
+  }, $data.isShowLoginButton ? {
+    f: common_vendor.o((...args) => $options.weixinLogin && $options.weixinLogin(...args))
+  } : {}, {
     g: common_vendor.t($data.studyNum),
     h: common_vendor.t($data.reviewNum),
     i: common_vendor.p({
@@ -93,7 +112,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "forward",
       size: "30"
     })
-  };
+  });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "F:/HTML5/前端框架/RememberWords/pages/personal/index.vue"]]);
 wx.createPage(MiniProgramPage);

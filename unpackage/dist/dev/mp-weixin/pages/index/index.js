@@ -17,13 +17,17 @@ const _sfc_main = {
       common_vendor.index.getStorage({
         key: "openid"
       }).then((res) => {
-        console.log(res);
+        console.log(res.data);
+        if (res.data == "") {
+          common_vendor.index.navigateTo({
+            url: "../../components/login/login"
+          });
+        } else {
+          common_vendor.index.navigateTo({
+            url: "homework/homework"
+          });
+        }
       });
-      {
-        common_vendor.index.navigateTo({
-          url: "../../components/login/login"
-        });
-      }
     }
   },
   //第一次加载时调用

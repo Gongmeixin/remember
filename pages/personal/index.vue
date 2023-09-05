@@ -9,10 +9,11 @@
 				<view class="navTitle">{{text}}</view>
 			</view>
 			<view class="mainPage">
-				<view class="p_top" :style="{ backgroundImage: `url(${userInfo.avatarUrl})`,}">
-					<view class="p_photo" @click="weixinLogin()">
+				<view class="p_top">
+					<view class="p_photo">
 						<img class="pPhoto" :src="userInfo.avatarUrl">
-						<text style="margin-top: 20rpx;">{{userInfo.nickName}}</text>
+						<text style="margin-top: 20rpx; font-size: 700;">{{userInfo.nickName}}</text>
+						<button class="login-btn" v-if="isShowLoginButton" @click="weixinLogin">请登录>></button>
 					</view>
 				</view>
 				<view class="p_top_bottom uni-shadow-lg">
@@ -55,8 +56,12 @@
 				userInfo: {
 					avatarUrl: '../../static/image/logo.png',
 					nickName: '昵称'
-				}
+				},
+				isShowLoginButton: true,
 			}
+		},
+		onShow: function() {
+
 		},
 		methods: {
 			goTestDetail() {
@@ -65,32 +70,23 @@
 				});
 			},
 			goPersonalInfo() {
-				uni.navigateTo({
-					url: 'personalInfo/personalInfo'
-				});
+				if (this.isShowLoginButton) {
+					uni.showToast({
+						title: '您未登录，请先登录！',
+						icon: 'none',
+						//显示持续时间为 2秒
+						duration: 2000
+					})
+				} else {
+					uni.navigateTo({
+						url: 'personalInfo/personalInfo'
+					});
+				}
+
 			},
 			weixinLogin() {
-				uni.login({
-					provider: 'weixin', //使用微信登录
-					success: function(loginRes) {
-						console.log(loginRes.code);
-						uni.request({
-							url: 'https://api.weixin.qq.com/sns/jscode2session',
-							data: {
-								'appid': 'wx52d880560f439605',
-								'secret': 'a874878c77ccb8dc3b0e599503379899',
-								'js_code': loginRes.code,
-								'grant_type': 'authorization_code'
-							},
-							method: 'GET',
-							success: res => {
-								console.log(res);
-							},
-							fail: err => {
-								console.log(err)
-							}
-						});
-					}
+				uni.navigateTo({
+					url: '../../components/login/login'
 				});
 			},
 			getStatusBarHeight() {
@@ -98,10 +94,36 @@
 				this.statusBarHeight = systemInfo['statusBarHeight'];
 				console.log(this.statusBarHeight)
 			},
-		}, //第一次加载时调用
+			getUserInfo(id) {
+				uniCloud.callFunction({
+					name: 'getUserInfo',
+					data: {
+						openid: id
+					}
+				}).then(res => {
+					console.log(res.result.data[0]);
+					this.userInfo.avatarUrl = res.result.data[0].avatarUrl;
+					this.userInfo.nickName = res.result.data[0].username;
+				});
+			},
+		},
+		//第一次加载时调用
 		created() {
 			//获取手机状态栏高度
-			this.getStatusBarHeight()
+			this.getStatusBarHeight();
+			let that = this;
+			uni.getStorage({
+				key: 'openid',
+				success(res) {
+					console.log(res.data);
+					if (res.data == '') {
+						that.isShowLoginButton = true;
+					} else {
+						that.isShowLoginButton = false;
+						that.getUserInfo(res.data);
+					}
+				}
+			});
 		},
 	}
 </script>
@@ -136,24 +158,20 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		-webkit-backdrop-filter: blur(10px);
-		backdrop-filter: blur(50px);
-		background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 45%);
-		/* background-attachment: fixed; */
-		background-position: center;
+		background-image: linear-gradient(#2979ff 5%,#fff);
 	}
 
 	.p_photo {
 		width: 200rpx;
 		height: 200rpx;
-		border: 10rpx solid #e9e9eb;
-		border-radius: 50%;
 		text-align: center;
 	}
 
 	.pPhoto {
 		height: 100%;
 		width: 100%;
+		border-radius: 50%;
+		box-shadow: 0px 0px 5px 10px rgba(0, 0, 0, 0.1);
 	}
 
 	.p_top_bottom {
@@ -185,5 +203,17 @@
 		width: 100%;
 		height: 100rpx;
 		border-radius: 20rpx;
+	}
+
+	.login-btn {
+		background-color: #00000000;
+		/* border-style: none; */
+		color: #2979ff;
+		font-size: 14px;
+		font-weight: 700;
+	}
+
+	.login-btn::after {
+		border: none;
 	}
 </style>
