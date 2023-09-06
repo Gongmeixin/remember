@@ -15,8 +15,6 @@ const _sfc_main = {
       isShowLoginButton: true
     };
   },
-  onShow: function() {
-  },
   methods: {
     goTestDetail() {
       common_vendor.index.navigateTo({
@@ -61,7 +59,7 @@ const _sfc_main = {
     }
   },
   //第一次加载时调用
-  created() {
+  onLoad() {
     this.getStatusBarHeight();
     let that = this;
     common_vendor.index.getStorage({

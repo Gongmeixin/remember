@@ -1,11 +1,16 @@
 <template>
 	<view class="answerList">
+		<view class="score-view">
+			<h1>
+				<!-- {{computScore()}} -->
+			</h1>
+		</view>
 		<view class="uni-padding-wrap uni-common-mt">
 			<uni-segmented-control :current="current" :values="unitIdArr" style-type="text" active-color="'#007aff'"
 				@clickItem="onClickItem" />
 		</view>
 		<ul>
-			<li v-for="(item,index) in rightWordsArr" :key="index" v-show="current+1 === item.unit">
+			<li v-for="(item,index) in rightWordsArr" :key="index" >
 				<view class="answerCard">
 					<view class="card_top">
 						<view class="top_left">
@@ -49,7 +54,9 @@
 				userWordsArr: [],
 				unitIdArr: [],
 				score: 0,
-				current: 0
+				current: 0,
+				ritghtAnswerArr:[],
+				currentUnit:1
 			}
 		},
 		methods: {
@@ -88,7 +95,8 @@
 				}).then(res => {
 					console.log(res.result.data);
 					this.rightWordsArr = this.rightWordsArr.concat(res.result.data);
-					console.log(this.rightWordsArr)
+					console.log(this.rightWordsArr);
+					this.getRightAnswer()
 					uni.hideLoading();
 				});
 			},
@@ -105,16 +113,24 @@
 					console.log(res.errCode);
 				});
 			},
-			computScore() {
-				this.score++;
-				console.log(this.score)
-			},
 			onClickItem(e) {
 				if (this.current != e.currentIndex) {
 					this.current = e.currentIndex;
-					console.log(this.current)
+					
+					console.log(this.unitIdArr[this.current])
 				}
-			}
+			},
+			getRightAnswer() {
+				let resultArr = [];
+				this.rightWordsArr.forEach(item => {
+					let newArr = this.userWordsArr.filter(_item => _item.userWord == item.word);
+					if(newArr.length >= 1){
+						resultArr = resultArr.concat(newArr);
+					}
+				});
+				console.log(resultArr);
+				this.rightWordsArr = resultArr;
+			},
 		},
 		onLoad() {
 			var that = this;
@@ -139,11 +155,20 @@
 					if (AIndex <= -1) {
 						return "您未作答！"
 					} else {
-						if (this.userWordsArr[AIndex].userWord == word) {}
 						return this.userWordsArr[AIndex].userWord
 					}
 				}
 			},
+			computScore(){
+				return function(unit){
+					this.rightWordsArr.forEach(item=>{
+						if(item.unit == unit){
+							this.score++
+						}
+					});
+					return this.score
+				}
+			}
 		}
 	}
 </script>

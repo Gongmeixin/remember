@@ -60,9 +60,6 @@
 				isShowLoginButton: true,
 			}
 		},
-		onShow: function() {
-
-		},
 		methods: {
 			goTestDetail() {
 				uni.navigateTo({
@@ -108,7 +105,7 @@
 			},
 		},
 		//第一次加载时调用
-		created() {
+		onLoad() {
 			//获取手机状态栏高度
 			this.getStatusBarHeight();
 			let that = this;

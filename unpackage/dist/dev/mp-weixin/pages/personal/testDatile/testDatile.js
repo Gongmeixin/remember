@@ -7,7 +7,9 @@ const _sfc_main = {
       userWordsArr: [],
       unitIdArr: [],
       score: 0,
-      current: 0
+      current: 0,
+      ritghtAnswerArr: [],
+      currentUnit: 1
     };
   },
   methods: {
@@ -47,6 +49,7 @@ const _sfc_main = {
         console.log(res.result.data);
         this.rightWordsArr = this.rightWordsArr.concat(res.result.data);
         console.log(this.rightWordsArr);
+        this.getRightAnswer();
         common_vendor.index.hideLoading();
       });
     },
@@ -62,15 +65,22 @@ const _sfc_main = {
         console.log(res.errCode);
       });
     },
-    computScore() {
-      this.score++;
-      console.log(this.score);
-    },
     onClickItem(e) {
       if (this.current != e.currentIndex) {
         this.current = e.currentIndex;
-        console.log(this.current);
+        console.log(this.unitIdArr[this.current]);
       }
+    },
+    getRightAnswer() {
+      let resultArr = [];
+      this.rightWordsArr.forEach((item) => {
+        let newArr = this.userWordsArr.filter((_item) => _item.userWord == item.word);
+        if (newArr.length >= 1) {
+          resultArr = resultArr.concat(newArr);
+        }
+      });
+      console.log(resultArr);
+      this.rightWordsArr = resultArr;
     }
   },
   onLoad() {
@@ -96,10 +106,18 @@ const _sfc_main = {
         if (AIndex <= -1) {
           return "您未作答！";
         } else {
-          if (this.userWordsArr[AIndex].userWord == word)
-            ;
           return this.userWordsArr[AIndex].userWord;
         }
+      };
+    },
+    computScore() {
+      return function(unit) {
+        this.rightWordsArr.forEach((item) => {
+          if (item.unit == unit) {
+            this.score++;
+          }
+        });
+        return this.score;
       };
     }
   }
@@ -148,8 +166,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         j: common_vendor.o(($event) => $options.playAudio(item.word), index),
         k: "e4ce76ae-3-" + i0,
         l: common_vendor.t(item.paraphrase),
-        m: index,
-        n: $data.current + 1 === item.unit
+        m: index
       });
     }),
     d: common_vendor.p({
