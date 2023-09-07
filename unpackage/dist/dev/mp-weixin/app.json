@@ -7,7 +7,10 @@
     "pages/index/homework/homeworkDetail",
     "pages/personal/testDatile/testDatile",
     "pages/personal/personalInfo/personalInfo",
-    "components/login/login"
+    "components/login/login",
+    "pages/index/dictationTest/dictationTest",
+    "pages/index/dictationTest/dictationTestDetail",
+    "pages/personal/D_testDetail/D_testDetail"
   ],
   "window": {
     "navigationBarTextStyle": "black",

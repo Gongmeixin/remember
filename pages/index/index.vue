@@ -16,11 +16,18 @@
 			</view>
 			<view class="button-box" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-440}px)`}">
 				<button class="mbutton uni-shadow-lg" @click="goHomeWork()" hover-class="hover">开始测试</button>
-				<button class="mbutton uni-shadow-lg" hover-class="hover">听写</button>
+				<button class="mbutton uni-shadow-lg" hover-class="hover" @click="goDictation()">听写</button>
 			</view>
 			<view class="bottomView" :style="{transform: `translate(0px,${screenHeight-statusBarHeight-44-300-50}px)`}">
 			</view>
 		</view>
+	</view>
+	<view>
+		<!-- 提示窗示例 -->
+		<uni-popup ref="alertDialog" type="dialog">
+			<uni-popup-dialog type="warn" cancelText="取消" confirmText="去登录" title="提示" :content="tipContent"
+				@confirm="dialogConfirm" @close="dialogClose"></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
@@ -32,30 +39,74 @@
 				statusBarHeight: 0,
 				// 导航栏高度
 				navBarHeight: 82 + 11,
-				screenHeight: 0
+				screenHeight: 0,
+				tipContent: '',
+				selectInfo: [],
+				isGo: false
 			}
 		},
 		onLoad() {
-			
+
 		},
 		methods: {
 			goHomeWork() {
 				let _this = this;
 				uni.getStorage({
 					key: 'openid',
-				}).then(res => {
-					console.log(res.data);
-					if (res.data == '') {
-						uni.navigateTo({
-							url: '../../components/login/login'
-						});
-					} else {
-						uni.navigateTo({
-							url: 'homework/homework'
-						});
+					success(res) {
+						console.log(res.data);
+						if (res.data != '') {
+							uni.navigateTo({
+								url: 'homework/homework'
+							});
+						}
+					},
+					fail(err) {
+						console.log(err.errMsg);
+						if (err.errMsg == 'getStorage:fail data not found') {
+							_this.goLogin()
+						}
 					}
 				});
 			},
+
+			goLogin() {
+				this.$refs.alertDialog.open();
+				this.tipContent = `您未登录，请先登录！`;
+				this.isGo = true;
+
+			},
+			dialogConfirm() {
+				console.log('点击了确认');
+				if (this.isGo) {
+					uni.navigateTo({
+						url: '../../components/login/login'
+					});
+				}
+			},
+			dialogClose() {
+				console.log('点击了取消')
+			},
+			goDictation(){
+				let _this = this;
+				uni.getStorage({
+					key: 'openid',
+					success(res) {
+						console.log(res.data);
+						if (res.data != '') {
+							uni.navigateTo({
+								url: 'dictationTest/dictationTest'
+							});
+						}
+					},
+					fail(err) {
+						console.log(err.errMsg);
+						if (err.errMsg == 'getStorage:fail data not found') {
+							_this.goLogin()
+						}
+					}
+				});
+			}
 		},
 		//第一次加载时调用
 		created() {
@@ -124,7 +175,8 @@
 		align-items: center;
 		justify-content: space-around;
 		position: absolute;
-		z-index: 999;
+		top: 130px;
+		z-index: 5;
 	}
 
 	.mbutton {

@@ -45,3 +45,10 @@
 .uni-padding-wrap {
 		padding: 0px 30px;
 }
+.tip {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: #8f939c;
+}

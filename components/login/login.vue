@@ -28,7 +28,7 @@
 				//前端数据请求时，显示加载提示弹框
 				uni.showLoading({
 					title: '加载中...',
-					mask:true
+					mask: true
 				});
 				uni.login({
 					provider: 'weixin',
@@ -51,17 +51,15 @@
 			},
 			getOpenId: function(code) {
 				let _this = this;
-				uni.request({
-					url: 'https://api.weixin.qq.com/sns/jscode2session',
-					method: "GET",
+
+				uniCloud.callFunction({
+					name: 'login_fn',
 					data: {
-						appid: 'wx52d880560f439605',
-						secret: 'a874878c77ccb8dc3b0e599503379899',
-						js_code: code,
-						grant_type: 'authorization_code'
+						code: code
 					},
 					success: function(res) {
-						var result = res.data;
+						let result = res.result.data;
+						console.log(result)
 						uni.setStorage({
 							key: 'openid',
 							data: result.openid,
@@ -75,7 +73,7 @@
 						}).then(res => {
 							return _this.goPersonalInfo();
 						});
-					}
+					},
 				});
 			}
 		},

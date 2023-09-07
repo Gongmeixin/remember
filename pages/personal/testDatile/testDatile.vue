@@ -1,16 +1,16 @@
 <template>
-	<view class="answerList">
-		<view class="score-view">
+	<view class="answerList" v-show="isShow">
+		<!-- <view class="score-view">
 			<h1>
-				<!-- {{computScore()}} -->
+				{{computScore(currentUnit)}}
 			</h1>
-		</view>
+		</view> -->
 		<view class="uni-padding-wrap uni-common-mt">
 			<uni-segmented-control :current="current" :values="unitIdArr" style-type="text" active-color="'#007aff'"
 				@clickItem="onClickItem" />
 		</view>
 		<ul>
-			<li v-for="(item,index) in rightWordsArr" :key="index" >
+			<li v-for="(item,index) in rightWordsArr" :key="index" v-show="current+1 == item.unit">
 				<view class="answerCard">
 					<view class="card_top">
 						<view class="top_left">
@@ -44,6 +44,9 @@
 			</li>
 		</ul>
 	</view>
+	<view v-show="!isShow" class="tip">
+		您还未答题,快去答题吧!
+	</view>
 </template>
 
 <script>
@@ -55,8 +58,9 @@
 				unitIdArr: [],
 				score: 0,
 				current: 0,
-				ritghtAnswerArr:[],
-				currentUnit:1
+				ritghtAnswerArr: [],
+				currentUnit: 1,
+				isShow: true
 			}
 		},
 		methods: {
@@ -68,14 +72,19 @@
 						openid: _id
 					}
 				}).then(res => {
-					this.userWordsArr = res.result.data;
-					console.log(this.userWordsArr);
-					this.getUnitId();
+					if (res.result.data.length != 0) {
+						this.userWordsArr = res.result.data;
+						console.log(this.userWordsArr);
+						this.getUnitId();
+					}else{
+						uni.hideLoading();
+						this.isShow = false
+					}
 				});
 			},
 			//获取用户答过题的单元id
 			getUnitId() {
-				console.log(this.unitIdArr);
+				// console.log(this.unitIdArr);
 				let unitId = this.unitIdArr;
 				this.userWordsArr.forEach(item => {
 					let res = unitId.some(i => i == item.unit + '单元');
@@ -93,10 +102,9 @@
 						unitId: id
 					}
 				}).then(res => {
-					console.log(res.result.data);
-					this.rightWordsArr = this.rightWordsArr.concat(res.result.data);
-					console.log(this.rightWordsArr);
-					this.getRightAnswer()
+					let newArr = [];
+					newArr = res.result.data;
+					this.rightWordsArr = this.rightWordsArr.concat(newArr);
 					uni.hideLoading();
 				});
 			},
@@ -116,20 +124,13 @@
 			onClickItem(e) {
 				if (this.current != e.currentIndex) {
 					this.current = e.currentIndex;
-					
-					console.log(this.unitIdArr[this.current])
+					this.currentUnit = this.unitIdArr[this.current].split('')[0];
 				}
 			},
 			getRightAnswer() {
-				let resultArr = [];
 				this.rightWordsArr.forEach(item => {
-					let newArr = this.userWordsArr.filter(_item => _item.userWord == item.word);
-					if(newArr.length >= 1){
-						resultArr = resultArr.concat(newArr);
-					}
-				});
-				console.log(resultArr);
-				this.rightWordsArr = resultArr;
+					console.log(this.findUserWord(item._id, item.word) == item.word)
+				})
 			},
 		},
 		onLoad() {
@@ -145,13 +146,13 @@
 						that.getUsrWords(res.data);
 					}
 				});
-			})
+			});
 		},
 		computed: {
 			//查找用户的答案
 			findUserWord() {
 				return function(_id, word) {
-					let AIndex = this.userWordsArr.findIndex(item => item.word_id == _id);
+					let AIndex = this.userWordsArr.findIndex(item => item.word_id === _id);
 					if (AIndex <= -1) {
 						return "您未作答！"
 					} else {
@@ -159,16 +160,11 @@
 					}
 				}
 			},
-			computScore(){
-				return function(unit){
-					this.rightWordsArr.forEach(item=>{
-						if(item.unit == unit){
-							this.score++
-						}
-					});
-					return this.score
-				}
-			}
+			// computScore() {
+			// 	return function(unit) {
+			// 		return this.score
+			// 	}
+			// }
 		}
 	}
 </script>
@@ -228,5 +224,13 @@
 
 	.uni-padding-wrap {
 		padding: 0px 30px;
+	}
+
+	.tip {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		color: #8f939c;
 	}
 </style>

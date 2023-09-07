@@ -61,7 +61,34 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/index/dictationTest/dictationTest",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "听写",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/index/dictationTest/dictationTestDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "听写",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/personal/D_testDetail/D_testDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarBackgroundColor": "#2979ff",

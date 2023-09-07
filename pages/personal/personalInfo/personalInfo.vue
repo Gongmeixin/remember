@@ -7,16 +7,16 @@
 				</button>
 			</view>
 			<uni-forms ref="baseForm" :modelValue="information" :rules="rules">
-				<uni-forms-item label="姓名" required name="name" class="user-input">
+				<uni-forms-item label="昵称" required name="name" class="user-input">
 					<uni-easyinput type="text" v-model="information.username" placeholder="请输入姓名" class="user-input" />
 				</uni-forms-item>
-				<uni-forms-item label="学校" required name="school">
+				<!-- <uni-forms-item label="学校" required name="school">
 					<uni-easyinput type="text" v-model="information.school" placeholder="请输入您所在学校" class="user-input" />
 				</uni-forms-item>
 				<uni-forms-item label="班级" required name="class">
 					<uni-easyinput type="text" v-model="information.classId" placeholder="您所在学校的班级"
 						class="user-input" />
-				</uni-forms-item>
+				</uni-forms-item> -->
 				<uni-forms-item label="手机" required name="phone">
 					<uni-easyinput type="text" v-model="information.phonNum" placeholder="我们可以成功与您沟通的联系方式"
 						class="user-input" />
@@ -74,9 +74,9 @@
 				information: {
 					openid: '',
 					avatarUrl: '../../../static/image/0.png',
-					username: '',
-					school: '',
-					classId: '',
+					nickName: '',
+					// school: '',
+					// classId: '',
 					phonNum: ''
 				},
 				isExit: true,

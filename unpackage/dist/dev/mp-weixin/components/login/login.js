@@ -35,17 +35,14 @@ const _sfc_main = {
     },
     getOpenId: function(code) {
       let _this = this;
-      common_vendor.index.request({
-        url: "https://api.weixin.qq.com/sns/jscode2session",
-        method: "GET",
+      common_vendor.Ds.callFunction({
+        name: "login_fn",
         data: {
-          appid: "wx52d880560f439605",
-          secret: "a874878c77ccb8dc3b0e599503379899",
-          js_code: code,
-          grant_type: "authorization_code"
+          code
         },
         success: function(res) {
-          var result = res.data;
+          let result = res.result.data;
+          console.log(result);
           common_vendor.index.setStorage({
             key: "openid",
             data: result.openid

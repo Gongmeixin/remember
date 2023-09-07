@@ -47,7 +47,8 @@
 		align-items: center;
 		justify-content: space-around;
 		position: absolute;
-		z-index: 999;
+		top: 130px;
+		z-index: 5;
 }
 .mbutton {
 		background-color: #2979ff;

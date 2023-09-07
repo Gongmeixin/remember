@@ -31,14 +31,18 @@
 					<text style="padding-left: 50rpx;">查看测试</text>
 					<uni-icons type="forward" size="30"></uni-icons>
 				</view>
+				<view class="lookTest uni-shadow-lg" @click="goD_TestDetail">
+					<text style="padding-left: 50rpx;">查看听力测试</text>
+					<uni-icons type="forward" size="30"></uni-icons>
+				</view>
 				<view class="aboutUs uni-shadow-lg" @click="goPersonalInfo()">
 					<text style="padding-left: 50rpx;">个人资料</text>
 					<uni-icons type="forward" size="30"></uni-icons>
 				</view>
-				<view class="aboutUs uni-shadow-lg">
+				<!-- <view class="aboutUs uni-shadow-lg">
 					<text style="padding-left: 50rpx;">关于我们</text>
 					<uni-icons type="forward" size="30"></uni-icons>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -64,6 +68,11 @@
 			goTestDetail() {
 				uni.navigateTo({
 					url: 'testDatile/testDatile'
+				});
+			},
+			goD_TestDetail(){
+				uni.navigateTo({
+					url: 'D_testDetail/D_testDetail'
 				});
 			},
 			goPersonalInfo() {
@@ -113,12 +122,12 @@
 				key: 'openid',
 				success(res) {
 					console.log(res.data);
-					if (res.data == '') {
-						that.isShowLoginButton = true;
-					} else {
-						that.isShowLoginButton = false;
-						that.getUserInfo(res.data);
-					}
+					that.getUserInfo(res.data);
+					that.isShowLoginButton = false;
+				},
+				fail(err) {
+					console.log(err.errMsg);
+					that.isShowLoginButton = false;
 				}
 			});
 		},
@@ -155,13 +164,14 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		background-image: linear-gradient(#2979ff 5%,#fff);
+		background-image: linear-gradient(#2979ff 5%, #fff);
 	}
 
 	.p_photo {
 		width: 200rpx;
 		height: 200rpx;
 		text-align: center;
+		z-index: 999;
 	}
 
 	.pPhoto {
@@ -169,6 +179,7 @@
 		width: 100%;
 		border-radius: 50%;
 		box-shadow: 0px 0px 5px 10px rgba(0, 0, 0, 0.1);
+		z-index: -1;
 	}
 
 	.p_top_bottom {

@@ -9,7 +9,8 @@ const _sfc_main = {
       score: 0,
       current: 0,
       ritghtAnswerArr: [],
-      currentUnit: 1
+      currentUnit: 1,
+      isShow: true
     };
   },
   methods: {
@@ -21,14 +22,18 @@ const _sfc_main = {
           openid: _id
         }
       }).then((res) => {
-        this.userWordsArr = res.result.data;
-        console.log(this.userWordsArr);
-        this.getUnitId();
+        if (res.result.data.length != 0) {
+          this.userWordsArr = res.result.data;
+          console.log(this.userWordsArr);
+          this.getUnitId();
+        } else {
+          common_vendor.index.hideLoading();
+          this.isShow = false;
+        }
       });
     },
     //获取用户答过题的单元id
     getUnitId() {
-      console.log(this.unitIdArr);
       let unitId = this.unitIdArr;
       this.userWordsArr.forEach((item) => {
         let res = unitId.some((i) => i == item.unit + "单元");
@@ -46,10 +51,9 @@ const _sfc_main = {
           unitId: id
         }
       }).then((res) => {
-        console.log(res.result.data);
-        this.rightWordsArr = this.rightWordsArr.concat(res.result.data);
-        console.log(this.rightWordsArr);
-        this.getRightAnswer();
+        let newArr = [];
+        newArr = res.result.data;
+        this.rightWordsArr = this.rightWordsArr.concat(newArr);
         common_vendor.index.hideLoading();
       });
     },
@@ -68,19 +72,13 @@ const _sfc_main = {
     onClickItem(e) {
       if (this.current != e.currentIndex) {
         this.current = e.currentIndex;
-        console.log(this.unitIdArr[this.current]);
+        this.currentUnit = this.unitIdArr[this.current].split("")[0];
       }
     },
     getRightAnswer() {
-      let resultArr = [];
       this.rightWordsArr.forEach((item) => {
-        let newArr = this.userWordsArr.filter((_item) => _item.userWord == item.word);
-        if (newArr.length >= 1) {
-          resultArr = resultArr.concat(newArr);
-        }
+        console.log(this.findUserWord(item._id, item.word) == item.word);
       });
-      console.log(resultArr);
-      this.rightWordsArr = resultArr;
     }
   },
   onLoad() {
@@ -102,24 +100,19 @@ const _sfc_main = {
     //查找用户的答案
     findUserWord() {
       return function(_id, word) {
-        let AIndex = this.userWordsArr.findIndex((item) => item.word_id == _id);
+        let AIndex = this.userWordsArr.findIndex((item) => item.word_id === _id);
         if (AIndex <= -1) {
           return "您未作答！";
         } else {
           return this.userWordsArr[AIndex].userWord;
         }
       };
-    },
-    computScore() {
-      return function(unit) {
-        this.rightWordsArr.forEach((item) => {
-          if (item.unit == unit) {
-            this.score++;
-          }
-        });
-        return this.score;
-      };
     }
+    // computScore() {
+    // 	return function(unit) {
+    // 		return this.score
+    // 	}
+    // }
   }
 };
 if (!Array) {
@@ -166,14 +159,17 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         j: common_vendor.o(($event) => $options.playAudio(item.word), index),
         k: "e4ce76ae-3-" + i0,
         l: common_vendor.t(item.paraphrase),
-        m: index
+        m: index,
+        n: $data.current + 1 == item.unit
       });
     }),
     d: common_vendor.p({
       ["custom-prefix"]: "custom-icon",
       type: "sound",
       size: "18"
-    })
+    }),
+    e: $data.isShow,
+    f: !$data.isShow
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "F:/HTML5/前端框架/RememberWords/pages/personal/testDatile/testDatile.vue"]]);

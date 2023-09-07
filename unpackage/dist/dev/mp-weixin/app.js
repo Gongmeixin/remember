@@ -10,6 +10,9 @@ if (!Math) {
   "./pages/personal/testDatile/testDatile.js";
   "./pages/personal/personalInfo/personalInfo.js";
   "./components/login/login.js";
+  "./pages/index/dictationTest/dictationTest.js";
+  "./pages/index/dictationTest/dictationTestDetail.js";
+  "./pages/personal/D_testDetail/D_testDetail.js";
 }
 const _sfc_main = {
   onLaunch: function() {

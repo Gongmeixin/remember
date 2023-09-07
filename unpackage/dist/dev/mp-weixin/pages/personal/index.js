@@ -21,6 +21,11 @@ const _sfc_main = {
         url: "testDatile/testDatile"
       });
     },
+    goD_TestDetail() {
+      common_vendor.index.navigateTo({
+        url: "D_testDetail/D_testDetail"
+      });
+    },
     goPersonalInfo() {
       if (this.isShowLoginButton) {
         common_vendor.index.showToast({
@@ -66,12 +71,12 @@ const _sfc_main = {
       key: "openid",
       success(res) {
         console.log(res.data);
-        if (res.data == "") {
-          that.isShowLoginButton = true;
-        } else {
-          that.isShowLoginButton = false;
-          that.getUserInfo(res.data);
-        }
+        that.getUserInfo(res.data);
+        that.isShowLoginButton = false;
+      },
+      fail(err) {
+        console.log(err.errMsg);
+        that.isShowLoginButton = false;
       }
     });
   }
@@ -105,11 +110,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "forward",
       size: "30"
     }),
-    l: common_vendor.o(($event) => $options.goPersonalInfo()),
+    l: common_vendor.o((...args) => $options.goD_TestDetail && $options.goD_TestDetail(...args)),
     m: common_vendor.p({
       type: "forward",
       size: "30"
-    })
+    }),
+    n: common_vendor.o(($event) => $options.goPersonalInfo())
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "F:/HTML5/前端框架/RememberWords/pages/personal/index.vue"]]);
