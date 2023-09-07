@@ -4,12 +4,14 @@ const _sfc_main = {
   data() {
     return {
       information: {
-        openid: "",
-        avatarUrl: "../../../static/image/0.png",
-        nickName: "",
-        // school: '',
-        // classId: '',
-        phonNum: ""
+        userInfo: {
+          openid: "",
+          nickName: "",
+          // school: '',
+          // classId: '',
+          phonNum: "",
+          avatarUrl: "../../../static/image/0.png"
+        }
       },
       isExit: true,
       rules: {
@@ -43,39 +45,47 @@ const _sfc_main = {
     common_vendor.index.getStorage({
       key: "openid",
       success(res) {
-        that.information.openid = res.data;
-        console.log(that.information.openid);
-        if (that.information.openid == "") {
-          that.isExit = !that.isExit;
-          that.upInfo();
-        } else {
-          that.getUserInfo(that.information.openid);
+        that.information.userInfo.openid = res.data;
+        console.log(that.information.userInfo.openid);
+        if (that.information.userInfo.openid != "") {
+          that.getUserInfo(that.information.userInfo.openid);
         }
       }
     });
   },
   methods: {
+    //保存用户信息
     upInfo() {
       common_vendor.Ds.callFunction({
         name: "saveUserInfo",
-        data: this.information
+        data: this.information.userInfo
       }).then((res) => {
-        console.log(res);
+        console.log(res.result.id);
+        if (res.result.id != "") {
+          this.goBack();
+        }
       });
     },
     onChooseAvatar(e) {
-      console.log(e.detail.avatarUrl);
-      this.information.avatarUrl = e.detail.avatarUrl;
+      if (e.detail) {
+        console.log(e.detail);
+        this.information.userInfo.avatarUrl = e.detail.avatarUrl;
+      }
     },
     getUserInfo(id) {
       common_vendor.Ds.callFunction({
         name: "getUserInfo",
         data: {
-          openid: this.information.openid
+          openid: this.information.userInfo.openid
         }
       }).then((res) => {
         console.log(res.result.data[0]);
-        this.information = res.result.data[0];
+        if (res.result.data[0] != null) {
+          this.information.userInfo = res.result.data[0];
+          this.isExit = true;
+        } else {
+          this.isExit = false;
+        }
       });
     },
     goBack() {
@@ -102,24 +112,24 @@ if (!Math) {
 }
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return common_vendor.e({
-    a: $data.information.avatarUrl,
+    a: $data.information.userInfo.avatarUrl,
     b: common_vendor.o((...args) => $options.onChooseAvatar && $options.onChooseAvatar(...args)),
-    c: common_vendor.o(($event) => $data.information.username = $event),
+    c: common_vendor.o(($event) => $data.information.userInfo.nickName = $event),
     d: common_vendor.p({
       type: "text",
-      placeholder: "请输入姓名",
-      modelValue: $data.information.username
+      placeholder: "我们对您的称呼",
+      modelValue: $data.information.userInfo.nickName
     }),
     e: common_vendor.p({
       label: "昵称",
       required: true,
       name: "name"
     }),
-    f: common_vendor.o(($event) => $data.information.phonNum = $event),
+    f: common_vendor.o(($event) => $data.information.userInfo.phonNum = $event),
     g: common_vendor.p({
       type: "text",
       placeholder: "我们可以成功与您沟通的联系方式",
-      modelValue: $data.information.phonNum
+      modelValue: $data.information.userInfo.phonNum
     }),
     h: common_vendor.p({
       label: "手机",
@@ -135,7 +145,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isExit ? {} : {}, {
     l: $data.isExit,
     m: common_vendor.o(($event) => $options.upInfo()),
-    n: common_vendor.o((...args) => $options.goBack && $options.goBack(...args))
+    n: common_vendor.o((...args) => $options.goBack && $options.goBack(...args)),
+    o: $data.isExit
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "F:/HTML5/前端框架/RememberWords/pages/personal/personalInfo/personalInfo.vue"]]);

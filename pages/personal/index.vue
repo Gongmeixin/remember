@@ -70,7 +70,7 @@
 					url: 'testDatile/testDatile'
 				});
 			},
-			goD_TestDetail(){
+			goD_TestDetail() {
 				uni.navigateTo({
 					url: 'D_testDetail/D_testDetail'
 				});
@@ -108,13 +108,16 @@
 					}
 				}).then(res => {
 					console.log(res.result.data[0]);
-					this.userInfo.avatarUrl = res.result.data[0].avatarUrl;
-					this.userInfo.nickName = res.result.data[0].username;
+					if (res.result.data[0] != null) {
+						this.userInfo.avatarUrl = res.result.data[0].avatarUrl;
+						console.log(this.userInfo.avatarUrl);
+						this.userInfo.nickName = res.result.data[0].nickName;
+						this.isShowLoginButton = false;
+					}
 				});
 			},
 		},
-		//第一次加载时调用
-		onLoad() {
+		onShow() {
 			//获取手机状态栏高度
 			this.getStatusBarHeight();
 			let that = this;
@@ -123,11 +126,10 @@
 				success(res) {
 					console.log(res.data);
 					that.getUserInfo(res.data);
-					that.isShowLoginButton = false;
 				},
 				fail(err) {
 					console.log(err.errMsg);
-					that.isShowLoginButton = false;
+					that.isShowLoginButton = true;
 				}
 			});
 		},

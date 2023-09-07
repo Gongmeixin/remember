@@ -22,10 +22,10 @@
 							</view>
 						</view>
 						<view class="top_right">
-							<view class="answerRight" v-if="findUserWord(item._id,item.word) == item.word">
+							<view class="answerRight" v-if="findUserWord(item._id) == item.word">
 								<uni-icons type="checkmarkempty" size="30" color='green'></uni-icons>
 							</view>
-							<view class="answerMiss" v-else="findUserWord(item._id,item.word) == item.word">
+							<view class="answerMiss" v-else="findUserWord(item._id) == item.word">
 								<uni-icons type="closeempty" size="30" color='red'></uni-icons>
 							</view>
 						</view>
@@ -148,11 +148,21 @@
 				});
 			});
 		},
+		
+		findWord(id){
+			let AIndex = this.userWordsArr.findIndex(item => item.word_id === id);
+			if (AIndex <= -1) {
+				return "您未作答！"
+			} else {
+				return this.userWordsArr[AIndex].userWord
+			}
+		},
 		computed: {
 			//查找用户的答案
 			findUserWord() {
-				return function(_id, word) {
-					let AIndex = this.userWordsArr.findIndex(item => item.word_id === _id);
+				let that = this;
+				return function(_id) {
+					let AIndex = that.userWordsArr.findIndex(item => item.word_id === _id);
 					if (AIndex <= -1) {
 						return "您未作答！"
 					} else {

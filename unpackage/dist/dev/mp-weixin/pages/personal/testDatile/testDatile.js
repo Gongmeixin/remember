@@ -96,11 +96,20 @@ const _sfc_main = {
       });
     });
   },
+  findWord(id) {
+    let AIndex = this.userWordsArr.findIndex((item) => item.word_id === id);
+    if (AIndex <= -1) {
+      return "您未作答！";
+    } else {
+      return this.userWordsArr[AIndex].userWord;
+    }
+  },
   computed: {
     //查找用户的答案
     findUserWord() {
-      return function(_id, word) {
-        let AIndex = this.userWordsArr.findIndex((item) => item.word_id === _id);
+      let that = this;
+      return function(_id) {
+        let AIndex = that.userWordsArr.findIndex((item) => item.word_id === _id);
         if (AIndex <= -1) {
           return "您未作答！";
         } else {
@@ -138,8 +147,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       return common_vendor.e({
         a: common_vendor.t(item.word),
         b: common_vendor.t($options.findUserWord(item._id)),
-        c: $options.findUserWord(item._id, item.word) == item.word
-      }, $options.findUserWord(item._id, item.word) == item.word ? {
+        c: $options.findUserWord(item._id) == item.word
+      }, $options.findUserWord(item._id) == item.word ? {
         d: "e4ce76ae-1-" + i0,
         e: common_vendor.p({
           type: "checkmarkempty",
@@ -154,7 +163,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           color: "red"
         })
       }, {
-        f: $options.findUserWord(item._id, item.word) == item.word,
+        f: $options.findUserWord(item._id) == item.word,
         i: common_vendor.t(item.pronounce),
         j: common_vendor.o(($event) => $options.playAudio(item.word), index),
         k: "e4ce76ae-3-" + i0,
